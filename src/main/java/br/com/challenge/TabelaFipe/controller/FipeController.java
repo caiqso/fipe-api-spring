@@ -18,22 +18,18 @@ public class FipeController {
         this.service = service;
     }
 
-    @GetMapping("/marcas")
-    public List<Dados> buscarMarcas(@RequestParam String tipo) {
-        if (!tipo.matches("carros|motos|caminhoes")) {
-            throw new ApiException("Tipo inválido. Use: carros, motos ou caminhoes");
-        }
+    @GetMapping("/{tipo}/marcas")
+    public List<Dados> buscarMarcas(@PathVariable String tipo) {
+        validarTipo(tipo);
         return service.buscarMarcas(tipo);
     }
 
-    @GetMapping("/modelos")
+    @GetMapping("/{tipo}/marcas/{marca}/modelos")
     public List<Dados> buscarModelos(
-            @RequestParam String tipo,
-            @RequestParam String marca) {
+            @PathVariable String tipo,
+            @PathVariable String marca) {
 
-        if (!tipo.matches("carros|motos|caminhoes")) {
-            throw new ApiException("Tipo inválido. Use: carros, motos ou caminhoes");
-        }
+        validarTipo(tipo);
 
         List<Dados> modelos = service.buscarModelos(tipo, marca);
 
@@ -44,15 +40,13 @@ public class FipeController {
         return modelos;
     }
 
-    @GetMapping("/veiculos")
+    @GetMapping("/{tipo}/marcas/{marca}/modelos/{modelo}/veiculos")
     public List<Veiculo> buscarVeiculos(
-            @RequestParam String tipo,
-            @RequestParam String marca,
-            @RequestParam String modelo) {
+            @PathVariable String tipo,
+            @PathVariable String marca,
+            @PathVariable String modelo) {
 
-        if (!tipo.matches("carros|motos|caminhoes")) {
-            throw new ApiException("Tipo inválido");
-        }
+        validarTipo(tipo);
 
         List<Dados> anos = service.buscarAnos(tipo, marca, modelo);
 
@@ -63,5 +57,11 @@ public class FipeController {
         return anos.stream()
                 .map(a -> service.buscarVeiculo(tipo, marca, modelo, a.codigo()))
                 .toList();
+    }
+
+    private void validarTipo(String tipo) {
+        if (!tipo.matches("carros|motos|caminhoes")) {
+            throw new ApiException("Tipo inválido. Use: carros, motos ou caminhoes");
+        }
     }
 }
