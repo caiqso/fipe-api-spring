@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ConverteDados implements IConverteDados{
+public class DataConverterImpl implements DataConverter {
 
     private ObjectMapper mapper = new ObjectMapper();
 

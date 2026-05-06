@@ -1,7 +1,7 @@
 package br.com.challenge.TabelaFipe.principal;
 
-import br.com.challenge.TabelaFipe.model.Dados;
-import br.com.challenge.TabelaFipe.model.Veiculo;
+import br.com.challenge.TabelaFipe.model.DataItem;
+import br.com.challenge.TabelaFipe.model.Vehicle;
 import br.com.challenge.TabelaFipe.service.FipeService;
 import org.springframework.stereotype.Component;
 
@@ -41,18 +41,18 @@ public class Principal {
             default -> throw new RuntimeException("Opção inválida");
         };
 
-        List<Dados> marcas = service.buscarMarcas(tipo);
+        List<DataItem> marcas = service.buscarMarcas(tipo);
 
         System.out.println("\n🔎 Buscando marcas...");
 
         marcas.stream()
-                .sorted(Comparator.comparing(Dados::codigo))
+                .sorted(Comparator.comparing(DataItem::codigo))
                 .forEach(System.out::println);
 
         System.out.println("Digite o código da marca:");
         String codigoMarca = leitura.nextLine();
 
-        List<Dados> modelos = service.buscarModelos(tipo, codigoMarca);
+        List<DataItem> modelos = service.buscarModelos(tipo, codigoMarca);
 
         System.out.println("\nModelos:");
         modelos.forEach(System.out::println);
@@ -60,7 +60,7 @@ public class Principal {
         System.out.println("\nDigite parte do nome do modelo:");
         String filtro = leitura.nextLine();
 
-        List<Dados> filtrados = modelos.stream()
+        List<DataItem> filtrados = modelos.stream()
                 .filter(m -> m.nome().toLowerCase().contains(filtro.toLowerCase()))
                 .toList();
 
@@ -70,9 +70,9 @@ public class Principal {
         System.out.println("\nDigite o código do modelo:");
         String codigoModelo = leitura.nextLine();
 
-        List<Dados> anos = service.buscarAnos(tipo, codigoMarca, codigoModelo);
+        List<DataItem> anos = service.buscarAnos(tipo, codigoMarca, codigoModelo);
 
-        List<Veiculo> veiculos = anos.stream()
+        List<Vehicle> veiculos = anos.stream()
                 .map(a -> service.buscarVeiculo(tipo, codigoMarca, codigoModelo, a.codigo()))
                 .toList();
 

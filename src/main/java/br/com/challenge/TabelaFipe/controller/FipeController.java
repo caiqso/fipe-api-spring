@@ -1,8 +1,8 @@
 package br.com.challenge.TabelaFipe.controller;
 
 import br.com.challenge.TabelaFipe.exception.ApiException;
-import br.com.challenge.TabelaFipe.model.Dados;
-import br.com.challenge.TabelaFipe.model.Veiculo;
+import br.com.challenge.TabelaFipe.model.DataItem;
+import br.com.challenge.TabelaFipe.model.Vehicle;
 import br.com.challenge.TabelaFipe.service.FipeService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +19,19 @@ public class FipeController {
     }
 
     @GetMapping("/{tipo}/marcas")
-    public List<Dados> buscarMarcas(@PathVariable String tipo) {
+    public List<DataItem> buscarMarcas(@PathVariable String tipo) {
         validarTipo(tipo);
         return service.buscarMarcas(tipo);
     }
 
     @GetMapping("/{tipo}/marcas/{marca}/modelos")
-    public List<Dados> buscarModelos(
+    public List<DataItem> buscarModelos(
             @PathVariable String tipo,
             @PathVariable String marca) {
 
         validarTipo(tipo);
 
-        List<Dados> modelos = service.buscarModelos(tipo, marca);
+        List<DataItem> modelos = service.buscarModelos(tipo, marca);
 
         if (modelos.isEmpty()) {
             throw new ApiException("Nenhum modelo encontrado para a marca informada");
@@ -41,14 +41,14 @@ public class FipeController {
     }
 
     @GetMapping("/{tipo}/marcas/{marca}/modelos/{modelo}/veiculos")
-    public List<Veiculo> buscarVeiculos(
+    public List<Vehicle> buscarVeiculos(
             @PathVariable String tipo,
             @PathVariable String marca,
             @PathVariable String modelo) {
 
         validarTipo(tipo);
 
-        List<Dados> anos = service.buscarAnos(tipo, marca, modelo);
+        List<DataItem> anos = service.buscarAnos(tipo, marca, modelo);
 
         if (anos.isEmpty()) {
             throw new ApiException("Nenhum ano encontrado para o modelo selecionado");
